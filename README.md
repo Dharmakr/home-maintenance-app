@@ -135,7 +135,7 @@ Built with **React Native + Expo** (TypeScript), runs on Android and iOS.
 
 ```bash
 # Clone the repo
-git clone https://github.com/YOUR_USERNAME/home-maintenance-app.git
+git clone https://github.com/Dharmakr/home-maintenance-app.git
 cd home-maintenance-app
 
 # Install dependencies
