@@ -152,6 +152,7 @@ export default function ItemsScreen() {
         <FlatList
           data={grouped}
           keyExtractor={(g) => g.title}
+          style={{ flex: 1 }}
           renderItem={({ item: group }) => (
             <View>
               <View style={styles.groupHeader}>

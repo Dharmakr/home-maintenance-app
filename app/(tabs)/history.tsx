@@ -127,6 +127,7 @@ export default function HistoryScreen() {
         <FlatList
           data={grouped}
           keyExtractor={(g) => g.month}
+          style={{ flex: 1 }}
           contentContainerStyle={{ paddingBottom: Spacing.xxl }}
           renderItem={({ item: group }) => (
             <View style={styles.monthGroup}>

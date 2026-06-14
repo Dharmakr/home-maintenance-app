@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useStore, selectOverdueItems, selectDueSoonItems, selectNeverDoneItems } from '../../src/store/useStore';
+import { useStore, selectOverdueItems, selectDueSoonItems, selectNeverDoneItems, getItemStatus } from '../../src/store/useStore';
 import { MaintenanceCard } from '../../src/components/MaintenanceCard';
 import { EmptyState } from '../../src/components/EmptyState';
 import { Colors, Spacing, FontSize, Radius, Shadow } from '../../src/constants/theme';
@@ -20,6 +20,7 @@ export default function DashboardScreen() {
   const overdue = selectOverdueItems(items, settings.dueSoonWindowDays);
   const dueSoon = selectDueSoonItems(items, settings.dueSoonWindowDays);
   const neverDone = selectNeverDoneItems(items);
+  const okItems = items.filter(item => getItemStatus(item, settings.dueSoonWindowDays) === 'ok');
 
   const onRefresh = useCallback(async () => {
     await loadItems();
@@ -111,8 +112,23 @@ export default function DashboardScreen() {
         </Section>
       )}
 
+      {/* Up to Date Section */}
+      {okItems.length > 0 && (
+        <Section
+          title="Up to Date"
+          icon="checkmark-circle"
+          iconColor={Colors.success}
+          count={okItems.length}
+          collapsible
+        >
+          {okItems.map((item) => (
+            <MaintenanceCard key={item.id} item={item} compact onMarkDone={onRefresh} />
+          ))}
+        </Section>
+      )}
+
       {/* All Clear */}
-      {overdue.length === 0 && dueSoon.length === 0 && items.length > 0 && neverDone.length === 0 && (
+      {overdue.length === 0 && dueSoon.length === 0 && neverDone.length === 0 && okItems.length > 0 && items.length > 0 && (
         <View style={styles.allClear}>
           <Ionicons name="checkmark-circle" size={56} color={Colors.success} />
           <Text style={styles.allClearTitle}>All caught up!</Text>
