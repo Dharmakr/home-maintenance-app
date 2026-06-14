@@ -3,7 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
+  ScrollView,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
@@ -110,15 +110,15 @@ export default function ItemsScreen() {
       </View>
 
       {/* Category Filter Horizontal Scroll */}
-      <FlatList
-        data={categories}
-        keyExtractor={(item) => item}
+      <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.catList}
         contentContainerStyle={styles.catContent}
-        renderItem={({ item: cat }) => (
+      >
+        {categories.map((cat) => (
           <TouchableOpacity
+            key={cat}
             style={[styles.catChip, selectedCategory === cat && styles.catChipActive]}
             onPress={() => setSelectedCategory(cat)}
           >
@@ -138,23 +138,22 @@ export default function ItemsScreen() {
               {cat}
             </Text>
           </TouchableOpacity>
-        )}
-      />
+        ))}
+      </ScrollView>
 
       {/* Items List */}
       {filtered.length === 0 ? (
-        <EmptyState
-          icon="search-outline"
-          title="No items found"
-          subtitle={search ? `No results for "${search}"` : 'Try a different filter.'}
-        />
+        <View style={styles.emptyContainer}>
+          <EmptyState
+            icon="search-outline"
+            title="No items found"
+            subtitle={search ? `No results for "${search}"` : 'Try a different filter.'}
+          />
+        </View>
       ) : (
-        <FlatList
-          data={grouped}
-          keyExtractor={(g) => g.title}
-          style={{ flex: 1 }}
-          renderItem={({ item: group }) => (
-            <View>
+        <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>
+          {grouped.map((group) => (
+            <View key={group.title}>
               <View style={styles.groupHeader}>
                 <Text style={styles.groupTitle}>{group.title}</Text>
                 <Text style={styles.groupCount}>{group.data.length}</Text>
@@ -163,9 +162,8 @@ export default function ItemsScreen() {
                 <MaintenanceCard key={item.id} item={item} />
               ))}
             </View>
-          )}
-          contentContainerStyle={{ paddingBottom: Spacing.xxl }}
-        />
+          ))}
+        </ScrollView>
       )}
     </View>
   );
@@ -270,6 +268,15 @@ const styles = StyleSheet.create({
   catChipTextActive: {
     color: Colors.textInverse,
     fontWeight: '600',
+  },
+  emptyContainer: {
+    flex: 1,
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    paddingBottom: Spacing.xxl,
   },
   groupHeader: {
     flexDirection: 'row',

@@ -3,12 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
+  ScrollView,
   TouchableOpacity,
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { format, parseISO, isThisMonth, isThisYear, subMonths, isAfter } from 'date-fns';
+import { format, parseISO, subMonths, isAfter } from 'date-fns';
 import { useStore } from '../../src/store/useStore';
 import { EmptyState } from '../../src/components/EmptyState';
 import { Colors, Spacing, FontSize, Radius, Shadow } from '../../src/constants/theme';
@@ -78,14 +78,14 @@ export default function HistoryScreen() {
     <View style={styles.container}>
       {/* Time Filter */}
       <View style={styles.filterRow}>
-        <FlatList
-          data={TIME_FILTERS}
-          keyExtractor={(f) => f.key}
+        <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.filterContent}
-          renderItem={({ item: f }) => (
+        >
+          {TIME_FILTERS.map((f) => (
             <TouchableOpacity
+              key={f.key}
               style={[styles.filterChip, timeFilter === f.key && styles.filterChipActive]}
               onPress={() => setTimeFilter(f.key)}
             >
@@ -93,8 +93,8 @@ export default function HistoryScreen() {
                 {f.label}
               </Text>
             </TouchableOpacity>
-          )}
-        />
+          ))}
+        </ScrollView>
       </View>
 
       {/* Summary Bar */}
@@ -118,19 +118,17 @@ export default function HistoryScreen() {
       )}
 
       {filtered.length === 0 ? (
-        <EmptyState
-          icon="time-outline"
-          title="No history yet"
-          subtitle="Mark maintenance tasks as done to see your completion history here."
-        />
+        <View style={styles.emptyContainer}>
+          <EmptyState
+            icon="time-outline"
+            title="No history yet"
+            subtitle="Mark maintenance tasks as done to see your completion history here."
+          />
+        </View>
       ) : (
-        <FlatList
-          data={grouped}
-          keyExtractor={(g) => g.month}
-          style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: Spacing.xxl }}
-          renderItem={({ item: group }) => (
-            <View style={styles.monthGroup}>
+        <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>
+          {grouped.map((group) => (
+            <View key={group.month} style={styles.monthGroup}>
               <View style={styles.monthHeader}>
                 <Text style={styles.monthTitle}>{group.month}</Text>
                 <Text style={styles.monthCount}>{group.records.length} completed</Text>
@@ -139,7 +137,6 @@ export default function HistoryScreen() {
                 const item = itemMap.get(record.itemId);
                 return (
                   <View key={record.id} style={styles.recordCard}>
-                    {/* Color accent */}
                     <View
                       style={[
                         styles.recordAccent,
@@ -179,8 +176,8 @@ export default function HistoryScreen() {
                 );
               })}
             </View>
-          )}
-        />
+          ))}
+        </ScrollView>
       )}
     </View>
   );
@@ -212,6 +209,9 @@ const styles = StyleSheet.create({
   summaryItem: { alignItems: 'center', gap: 2 },
   summaryValue: { fontSize: FontSize.xl, fontWeight: '700', color: Colors.primary },
   summaryLabel: { fontSize: FontSize.xs, color: Colors.textMuted },
+  emptyContainer: { flex: 1 },
+  list: { flex: 1 },
+  listContent: { paddingBottom: Spacing.xxl },
   monthGroup: { marginTop: Spacing.md },
   monthHeader: {
     flexDirection: 'row',
