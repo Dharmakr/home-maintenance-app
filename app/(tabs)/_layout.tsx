@@ -4,6 +4,7 @@ import { Colors, FontSize } from '../../src/constants/theme';
 import { useStore } from '../../src/store/useStore';
 import { selectOverdueItems } from '../../src/store/useStore';
 import { View, Text, StyleSheet, ColorValue } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function BadgeIcon({
   name,
@@ -30,6 +31,7 @@ function BadgeIcon({
 
 export default function TabLayout() {
   const { items, settings } = useStore();
+  const insets = useSafeAreaInsets();
   const overdueCount = selectOverdueItems(items, settings.dueSoonWindowDays).length;
 
   return (
@@ -40,8 +42,8 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: Colors.card,
           borderTopColor: Colors.border,
-          height: 60,
-          paddingBottom: 6,
+          height: 60 + insets.bottom,
+          paddingBottom: insets.bottom + 6,
         },
         tabBarLabelStyle: {
           fontSize: FontSize.xs,
