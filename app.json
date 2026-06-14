@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "Home Maintenance",
+    "slug": "home-maintenance-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1B4F72"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.homemaintenance.app",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Use Face ID / biometrics to unlock the app"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1B4F72"
+      },
+      "package": "com.homemaintenance.app",
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#1B4F72",
+          "sounds": []
+        }
+      ],
+      "expo-local-authentication"
+    ],
+    "scheme": "home-maintenance",
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
