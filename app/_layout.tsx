@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { AppState, AppStateStatus } from 'react-native';
+import { AppState, AppStateStatus, Platform } from 'react-native';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useStore } from '../src/store/useStore';
 import { initDatabase } from '../src/database/db';
 import { requestNotificationPermission, addNotificationResponseListener } from '../src/services/notifications';
@@ -9,6 +10,14 @@ import { LockScreen } from '../src/components/LockScreen';
 
 export default function RootLayout() {
   const { loadItems, loadHistory, loadSettings, settings, isLocked, lock } = useStore();
+
+  // Hide Android system navigation bar; swipe up from bottom to reveal temporarily
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      NavigationBar.setVisibilityAsync('hidden');
+      NavigationBar.setBehaviorAsync('overlay-swipe');
+    }
+  }, []);
 
   useEffect(() => {
     async function init() {
