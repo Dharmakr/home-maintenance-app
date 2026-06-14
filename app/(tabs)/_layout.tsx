@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors, FontSize } from '../../src/constants/theme';
 import { useStore } from '../../src/store/useStore';
 import { selectOverdueItems } from '../../src/store/useStore';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ColorValue } from 'react-native';
 
 function BadgeIcon({
   name,
@@ -12,7 +12,7 @@ function BadgeIcon({
   badge,
 }: {
   name: keyof typeof Ionicons.glyphMap;
-  color: string;
+  color: string | ColorValue;
   size: number;
   badge?: number;
 }) {

@@ -2,8 +2,8 @@ import * as SQLite from 'expo-sqlite';
 import { MaintenanceItem, HistoryRecord, AppSettings } from '../types';
 import { DEFAULT_MAINTENANCE_ITEMS, DEFAULT_SETTINGS } from '../constants/defaults';
 import { addDays, format, parseISO } from 'date-fns';
-import 'react-native-uuid';
-import { v4 as uuidv4 } from 'react-native-uuid';
+import uuid from 'react-native-uuid';
+const uuidv4 = () => uuid.v4() as string;
 
 let db: SQLite.SQLiteDatabase | null = null;
 
